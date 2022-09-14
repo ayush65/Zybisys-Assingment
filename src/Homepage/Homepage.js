@@ -1,7 +1,7 @@
 /** @format */
 
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import "./Homepage.css";
 
@@ -30,9 +30,9 @@ const Homepage = () => {
       });
   };
 
-  // if (value === "") {
-  //   boom();
-  // }
+  if (value === "") {
+    boom();
+  }
   const getAnime = async () => {
     return await axios
       .get(`https://api.jikan.moe/v4/anime?q=${value}`)
@@ -60,10 +60,6 @@ const Homepage = () => {
       });
   };
 
-  useEffect(() => {
-    setAnime([]);
-    boom();
-  }, [anime]);
   return (
     <div>
       <div className='navbar-container'>
