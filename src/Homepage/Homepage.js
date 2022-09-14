@@ -1,64 +1,99 @@
 /** @format */
 
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 
 import "./Homepage.css";
 
+const initState = { data: [], genre: "", url: "", search: "" };
+
+const projectsReducer = (state, action) => {
+  let filterStateCopy = { ...state };
+  switch (action.type) {
+    case "FETCH_PROJECTS":
+      let { data } = action.payload;
+      // console.log(action.payload);
+      // console.log(data);
+      return { ...filterStateCopy, data };
+
+    case "FETCH_PROJECTSs":
+      // console.log(filterStateCopy);
+      // console.log(action.payload.data);
+      filterStateCopy = {
+        ...filterStateCopy,
+
+        data: action.payload.data.filter((value, i) => {
+          if (action.payload.data[i].genres[0].name === action.payload.genre) {
+            return value;
+          } else {
+            return false;
+          }
+          //console.log(anime[i].genres[0].name);
+        }),
+      };
+      return { ...filterStateCopy };
+
+    case "FETCH_PROJECTSss":
+      console.log(action.payload);
+      console.log(action.payload.data[0].title);
+      filterStateCopy = {
+        ...filterStateCopy,
+
+        data: action.payload.data.filter((value, i) => {
+          if (
+            action.payload.data[i].title
+              .toLowerCase()
+              .includes(action.payload.search)
+          ) {
+            return value;
+          } else {
+            return false;
+          }
+
+          //console.log(anime[i].genres[0].name);
+        }),
+      };
+      return { ...filterStateCopy };
+
+    default:
+      return state;
+  }
+};
+
 const Homepage = () => {
   const [anime, setAnime] = useState([]);
+  const [projects, projectsDispatch] = useReducer(projectsReducer, initState);
 
   const [value, setValue] = useState("");
 
   const [category, setCategory] = useState("");
 
-  const ApiCallAnime = () => {
-    const options = {
-      method: "GET",
-      url: "https://api.jikan.moe/v4/anime",
-    };
+  useEffect(() => {
+    const initFetch = async () => {
+      const options = {
+        method: "GET",
+        url: "https://api.jikan.moe/v4/anime",
+      };
 
-    axios
-      .request(options)
-      .then(function (response) {
-        console.log(response.data.data);
-        setAnime(response.data.data);
-        console.log(anime[5].genres[0].name);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
-  };
-
-  if (value === "") {
-    ApiCallAnime();
-  }
-  const getAnime = async () => {
-    return await axios
-      .get(`https://api.jikan.moe/v4/anime?q=${value}`)
-      .then(function (response) {
-        //console.log(response.data.data);
-        setAnime(response.data.data);
-      });
-  };
-
-  const getAnimeCat = async () => {
-    return await axios
-      .get(`https://api.jikan.moe/v4/anime?q=${value}?=${category}`)
-      .then(function (response) {
-        console.log(response.data.data[0].genres[0].name === category);
-
-        if (response.data.data[0].genres[0].name === category) {
+      axios
+        .request(options)
+        .then(function (response) {
+          console.log(response.data.data);
           setAnime(response.data.data);
-        }
 
-        anime.genres[0].name.filter((value) => {
-          return value;
+          projectsDispatch({
+            type: "FETCH_PROJECTS",
+            payload: { data: response.data.data },
+          });
+
+          //  console.log(anime[5].genres[0].name);
+        })
+        .catch(function (error) {
+          console.error(error);
         });
-
-        console.log(anime);
-      });
-  };
+    };
+    initFetch();
+  }, []);
 
   return (
     <div>
@@ -77,39 +112,117 @@ const Homepage = () => {
                 className='form__input'
                 autoComplete='off'
                 placeholder=' Search Name'
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => {
+                  setValue(e.target.value);
+                  projectsDispatch({
+                    type: "FETCH_PROJECTSss",
+                    payload: { search: value, data: anime },
+                  });
+                }}
               />
-              <button className='search-button' onClick={() => getAnime()}>
-                Search
-              </button>
               <button
                 className='search-button'
-                onClick={() => {
-                  ApiCallAnime();
-                }}>
-                Reset
+                onClick={() =>
+                  projectsDispatch({
+                    type: "FETCH_PROJECTSss",
+                    payload: { search: value, data: anime },
+                  })
+                }>
+                Search
               </button>
             </div>
           </ul>
-
-          <div>
-            {" "}
-            <div>
-              {" "}
-              <button
-                className='search-button'
-                onClick={() => {
-                  setCategory("Comedy");
-                  getAnimeCat();
-                }}>
-                Comedy
-              </button>
-            </div>
-          </div>
+        </div>
+      </div>
+      <div>
+        {" "}
+        <div>
+          {" "}
+          <button
+            className='search-button'
+            onClick={() => {
+              setCategory("Comedy");
+              projectsDispatch({
+                type: "FETCH_PROJECTSs",
+                payload: { genre: category, data: anime },
+              });
+            }}>
+            Comedy
+          </button>
+        </div>
+        <div>
+          {" "}
+          <button
+            className='search-button'
+            onClick={() => {
+              setCategory("Action");
+              projectsDispatch({
+                type: "FETCH_PROJECTSs",
+                payload: { genre: category, data: anime },
+              });
+            }}>
+            Action
+          </button>
+        </div>
+        <div>
+          {" "}
+          <button
+            className='search-button'
+            onClick={() => {
+              setCategory("Adventure");
+              projectsDispatch({
+                type: "FETCH_PROJECTSs",
+                payload: { genre: category, data: anime },
+              });
+            }}>
+            Adventure
+          </button>
+        </div>
+        <div>
+          {" "}
+          <button
+            className='search-button'
+            onClick={() => {
+              setCategory("Drama");
+              projectsDispatch({
+                type: "FETCH_PROJECTSs",
+                payload: { genre: category, data: anime },
+              });
+            }}>
+            Drama
+          </button>
+        </div>
+        <div>
+          {" "}
+          <button
+            className='search-button'
+            onClick={() => {
+              setCategory("Sports");
+              projectsDispatch({
+                type: "FETCH_PROJECTSs",
+                payload: { genre: category, data: anime },
+              });
+            }}>
+            Sports
+          </button>
+        </div>
+        <div>
+          {" "}
+          <button
+            className='search-button'
+            onClick={() => {
+              setCategory("Avant Garde");
+              projectsDispatch({
+                type: "FETCH_PROJECTSs",
+                payload: { genre: category, data: anime },
+              });
+            }}>
+            Avant Garde
+          </button>
         </div>
       </div>
       <div className='menu-container'>
-        {anime.map((item, key) => {
+        {projects.data.map((item, key) => {
           return (
             <div className='card' key={item.mal_id}>
               <img
@@ -121,6 +234,7 @@ const Homepage = () => {
                 <b>{item.title}</b>
               </h4>
               <p>{item.rating}</p>
+              <p>{item.genres[0].name}</p>
             </div>
           );
         })}
