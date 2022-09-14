@@ -1,0 +1,174 @@
+/** @format */
+
+:root {
+  --primary-color: rgb(1, 22, 39);
+  --white: white;
+  --tertiary-color: #023e8a;
+  --navbar-hover: #aed1e6;
+  --navbar-shadow: rgba(50, 50, 93, 0.25);
+  --navbar-shad: rgba(0, 0, 0, 0.3);
+  --border-color: #777;
+  --card-shadow: rgba(0, 0, 0, 0.2);
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/** @format */
+
+.card {
+  box-shadow: 0 4px 8px 0 white;
+  transition: 0.3s;
+  width: 35rem;
+  height: 36rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 1rem;
+  font-size: 2rem;
+  border: 1px solid white;
+}
+
+.img-grid {
+  width: 100%;
+  height: 20rem;
+}
+.menu-container {
+  position: absolute;
+  top: 15%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8rem;
+  height: 100rem;
+  margin-left: 7rem;
+}
+
+.btn-menu {
+  background-color: var(--primary-color);
+  color: white;
+  width: 100%;
+  height: 10%;
+  margin-top: 1.2rem;
+  cursor: pointer;
+}
+
+.btn-menu:hover {
+  background-color: #36454f;
+  color: white;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 12px 25px 0 white;
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 2px 16px;
+}
+
+/** @format */
+
+.navbar-container {
+  width: 100%;
+  height: 8rem;
+  display: grid;
+  grid-template-columns: 5rem 2.5fr 2fr 4fr 3rem;
+  background-color: var(--primary-color);
+  border-bottom: 2px solid white;
+}
+html {
+  font-size: 62.5%;
+}
+.navbar-logo {
+  display: grid;
+  grid-column: 2/3;
+  justify-content: start;
+  align-items: center;
+  color: var(--white);
+}
+.navbar-menu {
+  grid-column: 3/4;
+}
+
+.navbar-components {
+  grid-column: 4/5;
+}
+.navbar-links-signout {
+  position: absolute;
+  top: 5%;
+  right: 0.5%;
+}
+.search-button {
+  height: 2.7rem;
+  width: 7rem;
+  color: var(--primary-color);
+}
+.navbar-list-links {
+  height: 10rem;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.form__input {
+  width: 30rem;
+  border: none;
+  height: 2.5rem;
+  border-radius: 3%;
+  margin-left: 1rem;
+  outline: none;
+}
+.navbar-links,
+.navbar-links-header {
+  text-decoration: none;
+  list-style-type: none;
+  font-size: 1.5rem;
+  color: var(--white);
+}
+
+.navbar-list-links-components {
+  height: 10rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 2.5rem;
+  align-items: center;
+}
+.icon-size {
+  font-size: 2rem;
+  color: var(--white);
+  display: flex;
+  text-decoration: none;
+}
+.icon-size:hover,
+.navbar-links:hover {
+  color: var(--navbar-hover);
+}
+.icons-align:first-child {
+  grid-column: 1/5;
+}
+.menu-link {
+  grid-column: 4/5;
+}
+
+@media screen and (max-width: 478px) {
+  .login {
+    width: 95%;
+  }
+}
+
+.navbar-list-h1s {
+  margin-top: 3rem;
+}
+
+.form {
+  display: flex;
+}
+
+.form1 {
+  display: flex;
+  font-size: 2rem;
+  gap: 1.5rem;
+  margin-left: 3rem;
+}
