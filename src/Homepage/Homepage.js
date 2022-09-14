@@ -12,7 +12,7 @@ const Homepage = () => {
 
   const [category, setCategory] = useState("");
 
-  const boom = () => {
+  const ApiCallAnime = () => {
     const options = {
       method: "GET",
       url: "https://api.jikan.moe/v4/anime",
@@ -31,7 +31,7 @@ const Homepage = () => {
   };
 
   if (value === "") {
-    boom();
+    ApiCallAnime();
   }
   const getAnime = async () => {
     return await axios
@@ -85,7 +85,7 @@ const Homepage = () => {
               <button
                 className='search-button'
                 onClick={() => {
-                  boom();
+                  ApiCallAnime();
                 }}>
                 Reset
               </button>
