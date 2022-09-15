@@ -20,7 +20,7 @@
 .card {
   box-shadow: 0 4px 8px 0 rgb(1, 22, 39);
   transition: 0.3s;
-  width: 24rem;
+  width: 26rem;
   height: 36rem;
   justify-content: center;
   align-items: center;
@@ -39,7 +39,7 @@
   top: 15%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8rem;
+  gap: 5rem;
   height: 100rem;
   margin-left: 15rem;
 }
