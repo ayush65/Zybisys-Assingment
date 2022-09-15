@@ -2,71 +2,39 @@
 
 import axios from "axios";
 import React, { useEffect, useReducer, useState } from "react";
+import { projectsReducer, initState } from "../Reducer/reducer";
 
 import "./Homepage.css";
-
-const initState = { data: [], genre: "", url: "", search: "" };
-
-const projectsReducer = (state, action) => {
-  let filterStateCopy = { ...state };
-  switch (action.type) {
-    case "FETCH_PROJECTS":
-      let { data } = action.payload;
-      // console.log(action.payload);
-      // console.log(data);
-      return { ...filterStateCopy, data };
-
-    case "FETCH_PROJECTSs":
-      // console.log(filterStateCopy);
-      // console.log(action.payload.data);
-      filterStateCopy = {
-        ...filterStateCopy,
-
-        data: action.payload.data.filter((value, i) => {
-          if (action.payload.data[i].genres[0].name === action.payload.genre) {
-            return value;
-          } else {
-            return false;
-          }
-          //console.log(anime[i].genres[0].name);
-        }),
-      };
-      return { ...filterStateCopy };
-
-    case "FETCH_PROJECTSss":
-      console.log(action.payload);
-      console.log(action.payload.data[0].title);
-      filterStateCopy = {
-        ...filterStateCopy,
-
-        data: action.payload.data.filter((value, i) => {
-          if (
-            action.payload.data[i].title
-              .toLowerCase()
-              .includes(action.payload.search)
-          ) {
-            return value;
-          } else {
-            return false;
-          }
-
-          //console.log(anime[i].genres[0].name);
-        }),
-      };
-      return { ...filterStateCopy };
-
-    default:
-      return state;
-  }
-};
 
 const Homepage = () => {
   const [anime, setAnime] = useState([]);
   const [projects, projectsDispatch] = useReducer(projectsReducer, initState);
 
+  const [id, setId] = useState([]);
+  // console.log(id);
+
   const [value, setValue] = useState("");
 
-  const [category, setCategory] = useState("");
+  const dragStared = (e, id) => {
+    console.log("drag has started", id);
+    e.dataTransfer.setData("mal_id", id);
+  };
+
+  const draggingOver = (e) => {
+    e.preventDefault();
+    console.log("Dragging Over Now");
+  };
+
+  const dragDrop = (e) => {
+    let transferredId = e.dataTransfer.getData("mal_id");
+    console.log("hi", transferredId);
+    setId(transferredId);
+
+    projectsDispatch({
+      type: "FETCH_DRAGDATA",
+      payload: { dragid: transferredId, dragable: anime },
+    });
+  };
 
   useEffect(() => {
     const initFetch = async () => {
@@ -82,8 +50,8 @@ const Homepage = () => {
           setAnime(response.data.data);
 
           projectsDispatch({
-            type: "FETCH_PROJECTS",
-            payload: { data: response.data.data },
+            type: "FETCH_DATA",
+            payload: { data: response.data.data, dragable: response.data.data },
           });
 
           //  console.log(anime[5].genres[0].name);
@@ -93,7 +61,9 @@ const Homepage = () => {
         });
     };
     initFetch();
-  }, []);
+
+    localStorage.setItem("id", JSON.stringify(id));
+  }, [id]);
 
   return (
     <div>
@@ -115,16 +85,16 @@ const Homepage = () => {
                 onChange={(e) => {
                   setValue(e.target.value);
                   projectsDispatch({
-                    type: "FETCH_PROJECTSss",
+                    type: "FETCH_SEARCH_NAME",
                     payload: { search: value, data: anime },
                   });
                 }}
               />
               <button
-                className='search-button'
+                className='search-button button'
                 onClick={() =>
                   projectsDispatch({
-                    type: "FETCH_PROJECTSss",
+                    type: "FETCH_SEARCH_NAME",
                     payload: { search: value, data: anime },
                   })
                 }>
@@ -135,16 +105,15 @@ const Homepage = () => {
         </div>
       </div>
       <div>
-        {" "}
+        <h1>click on th button to get genre</h1>{" "}
         <div>
           {" "}
           <button
             className='search-button'
             onClick={() => {
-              setCategory("Comedy");
               projectsDispatch({
-                type: "FETCH_PROJECTSs",
-                payload: { genre: category, data: anime },
+                type: "FETCH_GENRE_NAME",
+                payload: { genre: "Comedy", data: anime },
               });
             }}>
             Comedy
@@ -155,10 +124,9 @@ const Homepage = () => {
           <button
             className='search-button'
             onClick={() => {
-              setCategory("Action");
               projectsDispatch({
-                type: "FETCH_PROJECTSs",
-                payload: { genre: category, data: anime },
+                type: "FETCH_GENRE_NAME",
+                payload: { genre: "Action", data: anime },
               });
             }}>
             Action
@@ -169,10 +137,9 @@ const Homepage = () => {
           <button
             className='search-button'
             onClick={() => {
-              setCategory("Adventure");
               projectsDispatch({
-                type: "FETCH_PROJECTSs",
-                payload: { genre: category, data: anime },
+                type: "FETCH_GENRE_NAME",
+                payload: { genre: "Adventure", data: anime },
               });
             }}>
             Adventure
@@ -183,10 +150,9 @@ const Homepage = () => {
           <button
             className='search-button'
             onClick={() => {
-              setCategory("Drama");
               projectsDispatch({
-                type: "FETCH_PROJECTSs",
-                payload: { genre: category, data: anime },
+                type: "FETCH_GENRE_NAME",
+                payload: { genre: "Drama", data: anime },
               });
             }}>
             Drama
@@ -197,10 +163,9 @@ const Homepage = () => {
           <button
             className='search-button'
             onClick={() => {
-              setCategory("Sports");
               projectsDispatch({
-                type: "FETCH_PROJECTSs",
-                payload: { genre: category, data: anime },
+                type: "FETCH_GENRE_NAME",
+                payload: { genre: "Sports", data: anime },
               });
             }}>
             Sports
@@ -211,10 +176,9 @@ const Homepage = () => {
           <button
             className='search-button'
             onClick={() => {
-              setCategory("Avant Garde");
               projectsDispatch({
-                type: "FETCH_PROJECTSs",
-                payload: { genre: category, data: anime },
+                type: "FETCH_GENRE_NAME",
+                payload: { genre: "Avant Garde", data: anime },
               });
             }}>
             Avant Garde
@@ -223,6 +187,35 @@ const Homepage = () => {
       </div>
       <div className='menu-container'>
         {projects.data.map((item, key) => {
+          return (
+            <div
+              className='card'
+              draggable
+              onDragStart={(e) => dragStared(e, item.mal_id)}
+              key={item.mal_id}>
+              <img
+                className='img-grid'
+                src={item.images.jpg.image_url}
+                alt={item.photoAlt}
+              />
+              <h4>
+                <b>{item.title}</b>
+              </h4>
+              <p>{item.rating}</p>
+              <p>{item.genres[0].name}</p>
+            </div>
+          );
+        })}
+      </div>
+      <div
+        className='menuu-container'
+        droppable
+        onDrop={(e) => dragDrop(e)}
+        onDragOver={(e) => draggingOver(e)}>
+        <h1>WatchLater</h1>
+        <h3>Drag and drop your movies here</h3>
+        {console.log(projects.dragable)}
+        {projects.dragable.map((item, key) => {
           return (
             <div className='card' key={item.mal_id}>
               <img

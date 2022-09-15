@@ -27,7 +27,7 @@
   text-align: center;
   margin: 1rem;
   font-size: 2rem;
-  border: 1px solid white;
+  border: 1px solid rgb(1, 22, 39);
 }
 
 .img-grid {
@@ -38,10 +38,10 @@
   position: absolute;
   top: 15%;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 8rem;
   height: 100rem;
-  margin-left: 7rem;
+  margin-left: 15rem;
 }
 
 .btn-menu {
@@ -58,6 +58,15 @@
   color: white;
 }
 
+.menuu-container {
+  position: absolute;
+  right: 0;
+  top: 15%;
+  width: 50rem;
+  height: 600rem;
+  display: block;
+  border: 1px solid rgb(1, 22, 39);
+}
 /* On mouse-over, add a deeper shadow */
 .card:hover {
   box-shadow: 0 12px 25px 0 white;
@@ -171,4 +180,16 @@ html {
   font-size: 2rem;
   gap: 1.5rem;
   margin-left: 3rem;
+}
+
+.search-button {
+  width: 10rem;
+  margin: 0.5rem;
+  background-color: rgb(1, 22, 39);
+  color: white;
+}
+
+.button {
+  margin-top: -0.3rem;
+  border: 1px solid white;
 }
