@@ -112,6 +112,19 @@ const Homepage = () => {
             className='search-button'
             onClick={() => {
               projectsDispatch({
+                type: "FETCH_DATA",
+                payload: { data: anime },
+              });
+            }}>
+            All
+          </button>
+        </div>
+        <div>
+          {" "}
+          <button
+            className='search-button'
+            onClick={() => {
+              projectsDispatch({
                 type: "FETCH_GENRE_NAME",
                 payload: { genre: "Comedy", data: anime },
               });
